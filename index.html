@@ -465,7 +465,7 @@ body {
       <div class="big-amount">₹2,52,000</div>
       <div class="earn-tag">↑ Earning ₹1,366/month across both pockets</div>
     </div>
-    <div class="screen-body">
+    <div class="screen-body" id="savings-screen-body">
       <!-- Ready Funds card -->
       <div class="card tappable" onclick="go('s-ready')">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
@@ -505,6 +505,9 @@ body {
         </div>
       </div>
 
+      <!-- Dynamic custom pockets injected here -->
+      <div id="custom-pockets-list"></div>
+
       <div class="divider"></div>
 
       <!-- Nudge to add money -->
@@ -527,12 +530,170 @@ body {
         </div>
       </div>
     </div>
+
+    <!-- Sticky Add Pocket CTA -->
+    <div style="padding:10px 18px 6px;border-top:1px solid var(--border);background:var(--cream);flex-shrink:0">
+      <button onclick="go('s-new-pocket-name')" style="width:100%;background:var(--green);color:white;border:none;border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+        <span style="font-size:16px">＋</span> Add a savings pocket
+      </button>
+    </div>
     <div class="bottom-nav">
       <div class="nav-item" onclick="goBack('s-home')"><span class="nav-icon">🏠</span>Home</div>
       <div class="nav-item active"><span class="nav-icon">💰</span>Savings</div>
       <div class="nav-item" onclick="go('s-bills')"><span class="nav-icon">💳</span>Bills</div>
       <div class="nav-item"><span class="nav-icon">⚙️</span>More</div>
     </div>
+  </div>
+
+  <!-- ════════════════════════════════════
+    NEW POCKET — STEP 1: NAME
+  ════════════════════════════════════ -->
+  <div class="screen" id="s-new-pocket-name">
+    <div class="status-bar"><span class="status-time">9:41</span><span class="status-icons">●●● 🔋</span></div>
+    <div style="background:var(--green);padding:12px 20px 16px;flex-shrink:0;color:white">
+      <div class="back-row" onclick="goBack('s-savings')"><span class="back-arrow">←</span><span class="back-label">Savings</span></div>
+      <div style="font-size:16px;font-weight:600;font-family:'Playfair Display',serif;font-style:italic">New savings pocket</div>
+    </div>
+    <div style="display:flex;padding:12px 20px 0;gap:5px;flex-shrink:0">
+      <div style="flex:1;height:3px;border-radius:2px;background:var(--green)"></div>
+      <div style="flex:1;height:3px;border-radius:2px;background:var(--border)"></div>
+      <div style="flex:1;height:3px;border-radius:2px;background:var(--border)"></div>
+    </div>
+    <div class="screen-body">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-style:italic;font-size:22px;color:var(--ink);margin-bottom:5px">What's this pocket for?</div>
+        <div style="font-size:12px;color:var(--muted);font-weight:300">Give it a name that means something to you.</div>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:500;color:var(--soft);margin-bottom:6px">Pocket name</div>
+        <input id="new-pocket-name" class="input-field" type="text" value="Europe Trip" placeholder="e.g. House down payment" style="width:100%;font-size:16px" oninput="syncPocketName()"/>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Quick picks</div>
+        <div style="display:flex;flex-wrap:wrap;gap:7px">
+          <span class="pill green" style="cursor:pointer;font-size:11px" onclick="setName('House Down Payment')">🏠 House Down Payment</span>
+          <span class="pill green" style="cursor:pointer;font-size:11px" onclick="setName('Europe Trip')">✈️ Europe Trip</span>
+          <span class="pill green" style="cursor:pointer;font-size:11px" onclick="setName('New Car')">🚗 New Car</span>
+          <span class="pill green" style="cursor:pointer;font-size:11px" onclick="setName('Wedding')">💍 Wedding</span>
+          <span class="pill green" style="cursor:pointer;font-size:11px" onclick="setName('Rainy Day')">🌧️ Rainy Day</span>
+          <span class="pill green" style="cursor:pointer;font-size:11px" onclick="setName('Business Idea')">💡 Business Idea</span>
+        </div>
+      </div>
+      <div class="strip green">
+        <span class="strip-icon">💡</span>
+        <div class="strip-text green">Named pockets earn the same rate. The name keeps you intentional about what you're building.</div>
+      </div>
+    </div>
+    <button class="btn primary btn-full" onclick="go('s-new-pocket-type')">Next →</button>
+  </div>
+
+  <!-- ════════════════════════════════════
+    NEW POCKET — STEP 2: TYPE
+  ════════════════════════════════════ -->
+  <div class="screen" id="s-new-pocket-type">
+    <div class="status-bar"><span class="status-time">9:41</span><span class="status-icons">●●● 🔋</span></div>
+    <div style="background:var(--green);padding:12px 20px 16px;flex-shrink:0;color:white">
+      <div class="back-row" onclick="goBack('s-new-pocket-name')"><span class="back-arrow">←</span><span class="back-label">Back</span></div>
+      <div id="type-screen-heading" style="font-size:16px;font-weight:600;font-family:'Playfair Display',serif;font-style:italic">Europe Trip</div>
+    </div>
+    <div style="display:flex;padding:12px 20px 0;gap:5px;flex-shrink:0">
+      <div style="flex:1;height:3px;border-radius:2px;background:var(--green)"></div>
+      <div style="flex:1;height:3px;border-radius:2px;background:var(--green)"></div>
+      <div style="flex:1;height:3px;border-radius:2px;background:var(--border)"></div>
+    </div>
+    <div class="screen-body">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-style:italic;font-size:22px;color:var(--ink);margin-bottom:5px">How should this pocket behave?</div>
+        <div style="font-size:12px;color:var(--muted);font-weight:300">Controls how easy it is to take money out.</div>
+      </div>
+
+      <div id="opt-liquid" class="card tappable" style="border:2px solid var(--green);background:var(--green-light)" onclick="selectType('liquid')">
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:38px;height:38px;border-radius:11px;background:white;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">💧</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--green);margin-bottom:3px">Liquid</div>
+            <div style="font-size:11px;color:var(--green);line-height:1.5;margin-bottom:8px">Withdraw whenever you want, no questions asked. Best for flexible goals.</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <span class="pill green" style="font-size:9px">Withdraw anytime</span>
+              <span class="pill green" style="font-size:9px">7.1% p.a.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="opt-ringfenced" class="card tappable" onclick="selectType('ringfenced')">
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:38px;height:38px;border-radius:11px;background:var(--green-light);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🔒</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px">Ring-fenced</div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:8px">Hidden from your day-to-day balance. Asks "are you sure?" before withdrawal. For goals you don't want to raid.</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <span class="pill" style="background:var(--border);color:var(--soft);font-size:9px">🔒 Protected</span>
+              <span class="pill" style="background:var(--border);color:var(--soft);font-size:9px">6.5% p.a.</span>
+              <span class="pill" style="background:var(--border);color:var(--soft);font-size:9px">Friction on exit</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn primary btn-full" onclick="go('s-new-pocket-amount')">Next →</button>
+  </div>
+
+  <!-- ════════════════════════════════════
+    NEW POCKET — STEP 3: AMOUNT
+  ════════════════════════════════════ -->
+  <div class="screen" id="s-new-pocket-amount">
+    <div class="status-bar"><span class="status-time">9:41</span><span class="status-icons">●●● 🔋</span></div>
+    <div style="background:var(--green);padding:12px 20px 16px;flex-shrink:0;color:white">
+      <div class="back-row" onclick="goBack('s-new-pocket-type')"><span class="back-arrow">←</span><span class="back-label">Back</span></div>
+      <div id="amt-screen-heading" style="font-size:16px;font-weight:600;font-family:'Playfair Display',serif;font-style:italic">Europe Trip</div>
+    </div>
+    <div style="display:flex;padding:12px 20px 0;gap:5px;flex-shrink:0">
+      <div style="flex:1;height:3px;border-radius:2px;background:var(--green)"></div>
+      <div style="flex:1;height:3px;border-radius:2px;background:var(--green)"></div>
+      <div style="flex:1;height:3px;border-radius:2px;background:var(--green)"></div>
+    </div>
+    <div class="screen-body">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-style:italic;font-size:22px;color:var(--ink);margin-bottom:5px">How much to start with?</div>
+        <div style="font-size:12px;color:var(--muted);font-weight:300">From HDFC •••• 4821 · You can always add more later.</div>
+      </div>
+      <div>
+        <input id="new-pocket-amt" class="input-field" type="text" value="₹30,000" oninput="updateNewPocketEarn()" style="width:100%;font-size:28px;font-weight:700;text-align:center;color:var(--green);padding:18px"/>
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;justify-content:center">
+          <span class="pill green" style="cursor:pointer" onclick="setNewAmt('10000')">₹10K</span>
+          <span class="pill green" style="cursor:pointer" onclick="setNewAmt('25000')">₹25K</span>
+          <span class="pill green" style="cursor:pointer" onclick="setNewAmt('50000')">₹50K</span>
+          <span class="pill green" style="cursor:pointer" onclick="setNewAmt('100000')">₹1L</span>
+        </div>
+      </div>
+      <div style="background:var(--green-light);border:1px solid var(--green-mid);border-radius:14px;padding:14px 16px;text-align:center">
+        <div id="new-pocket-earn-preview" style="font-family:'Playfair Display',serif;font-size:24px;color:var(--green)">₹2,130 / year</div>
+        <div style="font-size:10px;color:var(--green);opacity:0.7;font-weight:300;margin-top:2px">at 7.1% p.a. · starts earning immediately</div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);font-weight:300">You can skip this and add money later — the pocket will be created empty.</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;padding:0 18px 14px;flex-shrink:0">
+      <button id="new-pocket-confirm" class="btn primary" onclick="go('s-new-pocket-done')">Create pocket · Add ₹30,000 →</button>
+      <button class="btn secondary" onclick="go('s-new-pocket-done')">Create empty pocket</button>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════
+    NEW POCKET — DONE
+  ════════════════════════════════════ -->
+  <div class="screen" id="s-new-pocket-done">
+    <div class="status-bar"><span class="status-time">9:41</span><span class="status-icons">●●● 🔋</span></div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:32px 24px;text-align:center">
+      <div id="new-pocket-success-emoji" style="font-size:54px">✈️</div>
+      <div id="new-pocket-success-title" style="font-family:'Playfair Display',serif;font-style:italic;font-size:24px;color:var(--ink)">Europe Trip created</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.6">₹30,000 is in and earning. Add more whenever you're ready — every top-up brings the goal closer.</div>
+      <div style="background:var(--green-light);border-radius:14px;padding:13px 14px;width:100%;text-align:left;display:flex;gap:10px;align-items:flex-start">
+        <span style="font-size:16px">💡</span>
+        <div style="font-size:11px;color:var(--green);line-height:1.5">Set a target amount and we'll show you how close you are each time you check in.</div>
+      </div>
+    </div>
+    <button class="btn primary btn-full" onclick="go('s-savings')">Back to Savings</button>
   </div>
 
   <!-- ════════════════════════════════════
@@ -932,6 +1093,217 @@ body {
   </div>
 
   <!-- ════════════════════════════════════
+    NEW POCKET — STEP 1: NAME
+  ════════════════════════════════════ -->
+  <div class="screen" id="s-new-pocket-name">
+    <div class="status-bar"><span class="status-time">9:41</span><span class="status-icons">●●● 🔋</span></div>
+    <div class="header-dark gradient" style="padding:12px 20px 16px">
+      <div class="back-row" onclick="goBack('s-savings')">
+        <span class="back-arrow">←</span><span class="back-label">Savings</span>
+      </div>
+      <div style="font-size:16px;font-weight:600;font-family:'Playfair Display',serif;font-style:italic;color:white">New savings pocket</div>
+    </div>
+    <!-- Step indicator -->
+    <div style="display:flex;padding:14px 20px 2px;gap:6px;flex-shrink:0">
+      <div style="flex:1;height:3px;border-radius:2px;background:var(--green)"></div>
+      <div style="flex:1;height:3px;border-radius:2px;background:var(--border)"></div>
+      <div style="flex:1;height:3px;border-radius:2px;background:var(--border)"></div>
+    </div>
+    <div class="screen-body">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-style:italic;font-size:22px;color:var(--ink);margin-bottom:5px">What's this pocket for?</div>
+        <div style="font-size:12px;color:var(--muted);font-weight:300">Give it a name that means something to you.</div>
+      </div>
+
+      <!-- Name input -->
+      <div>
+        <div class="input-label">Pocket name</div>
+        <input class="input-field" id="new-pocket-name-input" type="text" value="" placeholder="e.g. Europe Trip, New Car…" style="width:100%;font-size:16px"/>
+      </div>
+
+      <!-- Suggestions -->
+      <div>
+        <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Quick suggestions</div>
+        <div style="display:flex;flex-wrap:wrap;gap:7px">
+          <span class="pill outline" style="cursor:pointer;font-size:11px" onclick="setPocketName('Europe Trip')">✈️ Europe Trip</span>
+          <span class="pill outline" style="cursor:pointer;font-size:11px" onclick="setPocketName('New Car')">🚗 New Car</span>
+          <span class="pill outline" style="cursor:pointer;font-size:11px" onclick="setPocketName('Home Renovation')">🏠 Home Renovation</span>
+          <span class="pill outline" style="cursor:pointer;font-size:11px" onclick="setPocketName('Wedding')">💍 Wedding</span>
+          <span class="pill outline" style="cursor:pointer;font-size:11px" onclick="setPocketName('Bonus Parking')">💰 Bonus Parking</span>
+          <span class="pill outline" style="cursor:pointer;font-size:11px" onclick="setPocketName('Side Project')">🚀 Side Project</span>
+        </div>
+      </div>
+    </div>
+    <button class="btn primary btn-full" onclick="go('s-new-pocket-type')">Next →</button>
+  </div>
+
+  <!-- ════════════════════════════════════
+    NEW POCKET — STEP 2: TYPE
+  ════════════════════════════════════ -->
+  <div class="screen" id="s-new-pocket-type">
+    <div class="status-bar"><span class="status-time">9:41</span><span class="status-icons">●●● 🔋</span></div>
+    <div class="header-dark gradient" style="padding:12px 20px 16px">
+      <div class="back-row" onclick="goBack('s-new-pocket-name')">
+        <span class="back-arrow">←</span><span class="back-label">Back</span>
+      </div>
+      <div style="font-size:16px;font-weight:600;font-family:'Playfair Display',serif;font-style:italic;color:white" id="pocket-type-heading">New savings pocket</div>
+    </div>
+    <div style="display:flex;padding:14px 20px 2px;gap:6px;flex-shrink:0">
+      <div style="flex:1;height:3px;border-radius:2px;background:var(--green)"></div>
+      <div style="flex:1;height:3px;border-radius:2px;background:var(--green)"></div>
+      <div style="flex:1;height:3px;border-radius:2px;background:var(--border)"></div>
+    </div>
+    <div class="screen-body">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-style:italic;font-size:22px;color:var(--ink);margin-bottom:5px">How should this pocket behave?</div>
+        <div style="font-size:12px;color:var(--muted);font-weight:300">This shapes how Sukoon treats it — and how easy it is to dip into.</div>
+      </div>
+
+      <!-- Type 1: Liquid -->
+      <div id="type-liquid" class="card tappable" style="border:2px solid var(--green);background:var(--green-light)" onclick="selectPocketType('liquid')">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div style="width:40px;height:40px;border-radius:12px;background:white;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">💧</div>
+          <div style="flex:1">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+              <div style="font-size:13px;font-weight:700;color:var(--green)">Liquid</div>
+              <span class="pill green" style="font-size:9px">Selected</span>
+            </div>
+            <div style="font-size:11px;color:var(--green);font-weight:400;line-height:1.5">Withdraw anytime, no friction. Best for short-term goals or money you might need soon.</div>
+            <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+              <span style="font-size:9px;color:var(--green);background:white;border-radius:20px;padding:2px 8px;font-weight:500">Instant access</span>
+              <span style="font-size:9px;color:var(--green);background:white;border-radius:20px;padding:2px 8px;font-weight:500">No lock-in</span>
+              <span style="font-size:9px;color:var(--green);background:white;border-radius:20px;padding:2px 8px;font-weight:500">~7.1% p.a.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Type 2: Ring-fenced -->
+      <div id="type-ringfenced" class="card tappable" onclick="selectPocketType('ringfenced')">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div style="width:40px;height:40px;border-radius:12px;background:var(--green-light);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🔒</div>
+          <div style="flex:1">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+              <div style="font-size:13px;font-weight:700;color:var(--ink)">Ring-fenced</div>
+            </div>
+            <div style="font-size:11px;color:var(--muted);font-weight:400;line-height:1.5">Hidden from your day-to-day balance. Harder to accidentally spend. For goals you want to protect.</div>
+            <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+              <span style="font-size:9px;color:var(--soft);background:var(--cream);border-radius:20px;padding:2px 8px;font-weight:500">Protected view</span>
+              <span style="font-size:9px;color:var(--soft);background:var(--cream);border-radius:20px;padding:2px 8px;font-weight:500">Withdrawal with intent</span>
+              <span style="font-size:9px;color:var(--soft);background:var(--cream);border-radius:20px;padding:2px 8px;font-weight:500">~6.5% p.a.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Type 3: Goal-locked -->
+      <div id="type-locked" class="card tappable" onclick="selectPocketType('locked')">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div style="width:40px;height:40px;border-radius:12px;background:var(--amber-light);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🎯</div>
+          <div style="flex:1">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+              <div style="font-size:13px;font-weight:700;color:var(--ink)">Goal-locked</div>
+              <span class="pill amber" style="font-size:9px">Most disciplined</span>
+            </div>
+            <div style="font-size:11px;color:var(--muted);font-weight:400;line-height:1.5">Set a target amount and date. Withdrawals require confirmation. Built for big goals.</div>
+            <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+              <span style="font-size:9px;color:var(--amber);background:var(--amber-light);border-radius:20px;padding:2px 8px;font-weight:500">Target date</span>
+              <span style="font-size:9px;color:var(--amber);background:var(--amber-light);border-radius:20px;padding:2px 8px;font-weight:500">Progress tracking</span>
+              <span style="font-size:9px;color:var(--amber);background:var(--amber-light);border-radius:20px;padding:2px 8px;font-weight:500">~6.5% p.a.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn primary btn-full" onclick="go('s-new-pocket-amount')">Next →</button>
+  </div>
+
+  <!-- ════════════════════════════════════
+    NEW POCKET — STEP 3: AMOUNT
+  ════════════════════════════════════ -->
+  <div class="screen" id="s-new-pocket-amount">
+    <div class="status-bar"><span class="status-time">9:41</span><span class="status-icons">●●● 🔋</span></div>
+    <div class="header-dark gradient" style="padding:12px 20px 16px">
+      <div class="back-row" onclick="goBack('s-new-pocket-type')">
+        <span class="back-arrow">←</span><span class="back-label">Back</span>
+      </div>
+      <div style="font-size:16px;font-weight:600;font-family:'Playfair Display',serif;font-style:italic;color:white" id="pocket-amount-heading">New pocket</div>
+    </div>
+    <div style="display:flex;padding:14px 20px 2px;gap:6px;flex-shrink:0">
+      <div style="flex:1;height:3px;border-radius:2px;background:var(--green)"></div>
+      <div style="flex:1;height:3px;border-radius:2px;background:var(--green)"></div>
+      <div style="flex:1;height:3px;border-radius:2px;background:var(--green)"></div>
+    </div>
+    <div class="screen-body">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-style:italic;font-size:22px;color:var(--ink);margin-bottom:5px">How much to start with?</div>
+        <div style="font-size:12px;color:var(--muted);font-weight:300">From your HDFC •••• 4821 · You can add more any time.</div>
+      </div>
+
+      <div>
+        <input class="input-field" id="new-pocket-amount-input" type="text" value="₹10,000"
+          style="width:100%;font-size:28px;text-align:center;padding:18px;color:var(--green)"
+          oninput="updateNewPocketEarnings()"/>
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+          <span class="pill green" style="cursor:pointer" onclick="setNewPocketAmt('5000')">₹5K</span>
+          <span class="pill green" style="cursor:pointer" onclick="setNewPocketAmt('10000')">₹10K</span>
+          <span class="pill green" style="cursor:pointer" onclick="setNewPocketAmt('25000')">₹25K</span>
+          <span class="pill green" style="cursor:pointer" onclick="setNewPocketAmt('50000')">₹50K</span>
+          <span class="pill outline" style="cursor:pointer" onclick="setNewPocketAmt('0')">Start empty</span>
+        </div>
+      </div>
+
+      <!-- Earnings preview -->
+      <div style="background:var(--green-light);border:1px solid var(--green-mid);border-radius:14px;padding:14px 16px;text-align:center">
+        <div style="font-family:'Playfair Display',serif;font-size:24px;color:var(--green)" id="new-pocket-earn-preview">₹710 / year</div>
+        <div style="font-size:10px;color:var(--green);opacity:0.7;font-weight:300;margin-top:2px">at 7.1% p.a. · starts earning immediately</div>
+      </div>
+
+      <!-- Goal target (shown for goal-locked type) -->
+      <div id="goal-target-section" style="display:none">
+        <div class="card" style="border-color:var(--amber-border,#F0C060)">
+          <div style="font-size:11px;font-weight:600;color:var(--amber);margin-bottom:10px">🎯 Goal target</div>
+          <div style="display:flex;gap:8px">
+            <div style="flex:1">
+              <div class="input-label">Target amount</div>
+              <input class="input-field" type="text" value="₹2,00,000" style="width:100%;font-size:14px"/>
+            </div>
+            <div style="flex:1">
+              <div class="input-label">By when</div>
+              <input class="input-field" type="text" value="Dec 2026" style="width:100%;font-size:14px"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hint-row">
+        <div class="dot"></div>
+        <div id="new-pocket-hint">No lock-in — withdraw anytime.</div>
+      </div>
+    </div>
+    <button class="btn primary btn-full" id="new-pocket-confirm-btn" onclick="savePocket()">Create pocket →</button>
+  </div>
+
+  <!-- ════════════════════════════════════
+    NEW POCKET — SUCCESS
+  ════════════════════════════════════ -->
+  <div class="screen" id="s-new-pocket-success">
+    <div class="status-bar"><span class="status-time">9:41</span><span class="status-icons">●●● 🔋</span></div>
+    <div style="flex:1;display:flex;flex-direction:column">
+      <div class="success-screen" style="flex:1">
+        <div class="success-icon green" style="font-size:32px" id="new-pocket-success-icon">✈️</div>
+        <div class="success-title" id="new-pocket-success-title">Europe Trip is live</div>
+        <div class="success-sub" id="new-pocket-success-sub">₹10,000 parked and earning 7.1% p.a.<br>Every rupee is working towards your goal.</div>
+        <div class="strip green" style="width:100%">
+          <span class="strip-icon" id="new-pocket-success-strip-icon">💧</span>
+          <div class="strip-text green" id="new-pocket-success-strip-text">Fully liquid — withdraw anytime with no penalties.</div>
+        </div>
+      </div>
+      <button class="btn primary btn-full" onclick="go('s-savings')">Back to Savings</button>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════
     BILLS MAIN
   ════════════════════════════════════ -->
   <div class="screen" id="s-bills">
@@ -1242,6 +1614,7 @@ body {
     <span onclick="go('s-ready')" style="cursor:pointer;background:white;border:1px solid #E5E1DA;border-radius:20px;padding:5px 12px;font-size:11px;color:#3D6B52;font-weight:500">Ready Funds</span>
     <span onclick="go('s-reserve')" style="cursor:pointer;background:white;border:1px solid #E5E1DA;border-radius:20px;padding:5px 12px;font-size:11px;color:#3D6B52;font-weight:500">🔒 Reserve</span>
     <span onclick="go('s-reserve-setup-1')" style="cursor:pointer;background:white;border:1px solid #E5E1DA;border-radius:20px;padding:5px 12px;font-size:11px;color:#3D6B52;font-weight:500">Reserve Setup</span>
+    <span onclick="go('s-new-pocket-name')" style="cursor:pointer;background:white;border:1px solid #E5E1DA;border-radius:20px;padding:5px 12px;font-size:11px;color:#3D6B52;font-weight:500">＋ New Pocket</span>
     <span onclick="go('s-bills')" style="cursor:pointer;background:white;border:1px solid #E5E1DA;border-radius:20px;padding:5px 12px;font-size:11px;color:#C4680A;font-weight:500">💳 Bills</span>
     <span onclick="go('s-bills-add')" style="cursor:pointer;background:white;border:1px solid #E5E1DA;border-radius:20px;padding:5px 12px;font-size:11px;color:#C4680A;font-weight:500">Add Bill (AA)</span>
     <span onclick="go('s-bills-aa-connecting')" style="cursor:pointer;background:white;border:1px solid #E5E1DA;border-radius:20px;padding:5px 12px;font-size:11px;color:#C4680A;font-weight:500">AA Connecting</span>
@@ -1276,6 +1649,159 @@ body {
     } else {
       go(fallback, true);
     }
+  }
+
+  // ── New Pocket flow helpers ──
+  let selectedPocketType = 'liquid';
+
+  function setPocketName(val) {
+    const el = document.getElementById('new-pocket-name-input');
+    if (el) el.value = val;
+    const h = document.getElementById('pocket-type-heading');
+    const h2 = document.getElementById('pocket-amount-heading');
+    if (h) h.textContent = val;
+    if (h2) h2.textContent = val;
+  }
+
+  function selectPocketType(type) {
+    selectedPocketType = type;
+    const types = ['liquid','ringfenced','locked'];
+    types.forEach(t => {
+      const el = document.getElementById('type-' + t);
+      if (!el) return;
+      if (t === type) {
+        el.style.border = '2px solid var(--green)';
+        el.style.background = type === 'locked' ? 'var(--amber-light)' : 'var(--green-light)';
+      } else {
+        el.style.border = '1px solid var(--border)';
+        el.style.background = 'white';
+      }
+    });
+    // update selected pill visibility
+    document.querySelectorAll('#type-liquid .pill, #type-ringfenced .pill, #type-locked .pill.green').forEach(p => {
+      p.style.display = 'none';
+    });
+    const selPill = document.querySelector('#type-' + type + ' .pill.green') ||
+                    document.querySelector('#type-' + type + ' .pill');
+    if (selPill) selPill.style.display = 'inline-flex';
+    // show goal target section only for locked
+    const goalSection = document.getElementById('goal-target-section');
+    if (goalSection) goalSection.style.display = type === 'locked' ? 'block' : 'none';
+    // update hint text
+    const hintEl = document.getElementById('new-pocket-hint');
+    if (hintEl) {
+      if (type === 'liquid') hintEl.textContent = 'No lock-in — withdraw anytime.';
+      else if (type === 'ringfenced') hintEl.textContent = 'Protected from view — accessible when you choose.';
+      else hintEl.textContent = 'Withdrawal requires confirming intent.';
+    }
+    // sync success screen strip
+    const stripIcon = document.getElementById('new-pocket-success-strip-icon');
+    const stripText = document.getElementById('new-pocket-success-strip-text');
+    if (stripIcon && stripText) {
+      if (type === 'liquid') { stripIcon.textContent = '💧'; stripText.textContent = 'Fully liquid — withdraw anytime with no penalties.'; }
+      else if (type === 'ringfenced') { stripIcon.textContent = '🔒'; stripText.textContent = 'Ring-fenced — hidden from your daily balance.'; }
+      else { stripIcon.textContent = '🎯'; stripText.textContent = 'Goal-locked — stay on track. Withdrawals require confirmation.'; }
+    }
+  }
+
+  function updateNewPocketEarnings() {
+    const raw = (document.getElementById('new-pocket-amount-input')?.value || '10000').replace(/[₹,]/g,'');
+    const amt = parseInt(raw) || 0;
+    const earn = Math.round(amt * 0.071);
+    const fmt = n => '₹' + n.toLocaleString('en-IN');
+    const el = document.getElementById('new-pocket-earn-preview');
+    const btn = document.getElementById('new-pocket-confirm-btn');
+    if (el) el.textContent = amt === 0 ? 'Add money later' : fmt(earn) + ' / year';
+    if (btn) btn.textContent = amt === 0 ? 'Create pocket (empty)' : 'Create pocket · Park ' + fmt(amt) + ' →';
+    // sync success screen sub
+    const name = document.getElementById('new-pocket-name-input')?.value || 'Your pocket';
+    const sub = document.getElementById('new-pocket-success-sub');
+    const title = document.getElementById('new-pocket-success-title');
+    if (title) title.textContent = name + ' is live';
+    if (sub && amt > 0) sub.textContent = fmt(amt) + ' parked and earning 7.1% p.a.\nEvery rupee is working towards your goal.';
+    else if (sub) sub.textContent = 'Your pocket is ready. Add money whenever you like.';
+  }
+
+  function setNewPocketAmt(val) {
+    const el = document.getElementById('new-pocket-amount-input');
+    if (!el) return;
+    if (val === '0') { el.value = '₹0'; }
+    else { el.value = '₹' + parseInt(val).toLocaleString('en-IN'); }
+    updateNewPocketEarnings();
+  }
+
+  const typeConfig = {
+    liquid:      { icon: '💧', pill: 'Freely accessible',    pillStyle: 'green',  rate: '7.1%', sub: 'Withdraw anytime · no restrictions' },
+    ringfenced:  { icon: '🔒', pill: 'Ring-fenced',          pillStyle: 'green',  rate: '6.5%', sub: 'Protected · withdraw when you choose' },
+    locked:      { icon: '🎯', pill: 'Goal-locked',          pillStyle: 'amber',  rate: '6.5%', sub: 'Stays put · built for big goals' },
+  };
+
+  const emojiMap = {
+    'Europe Trip':'✈️','New Car':'🚗','Home Renovation':'🏠',
+    'Wedding':'💍','Bonus Parking':'💰','Side Project':'🚀'
+  };
+
+  function savePocket() {
+    const name   = document.getElementById('new-pocket-name-input')?.value.trim() || 'My Pocket';
+    const rawAmt = (document.getElementById('new-pocket-amount-input')?.value || '0').replace(/[₹,]/g,'');
+    const amt    = parseInt(rawAmt) || 0;
+    const type   = selectedPocketType;
+    const cfg    = typeConfig[type];
+    const emoji  = emojiMap[name] || '💰';
+    const fmt    = n => '₹' + n.toLocaleString('en-IN');
+
+    // Build card HTML
+    const amtHtml = amt > 0
+      ? `<div style="font-size:14px;font-weight:700;color:var(--ink)">${fmt(amt)}</div>
+         <div style="font-size:9px;color:var(--green);font-weight:500">${cfg.rate} p.a.</div>`
+      : `<div style="font-size:11px;color:var(--muted);font-weight:400">Empty</div>
+         <div style="font-size:9px;color:var(--green);font-weight:500">${cfg.rate} p.a.</div>`;
+
+    const lockBadge = type === 'ringfenced'
+      ? `<div class="lock-badge" style="margin-left:6px"><span>🔒 Protected</span></div>` : '';
+
+    const pillColor = cfg.pillStyle === 'amber'
+      ? 'background:var(--amber-light);color:var(--amber)'
+      : 'background:var(--green-light);color:var(--green)';
+
+    const cardHtml = `
+      <div class="card" style="animation:fadeIn 0.3s ease;border-left:3px solid var(--green)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+          <div>
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+              <span style="font-size:14px">${emoji}</span>
+              <div style="font-size:13px;font-weight:600;color:var(--ink)">${name}</div>
+              ${lockBadge}
+            </div>
+            <div style="font-size:10px;color:var(--muted);font-weight:300">${cfg.sub}</div>
+          </div>
+          <div style="text-align:right">${amtHtml}</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span class="pill" style="${pillColor};font-size:9px;padding:3px 9px">${cfg.pill}</span>
+          <span style="font-size:10px;color:var(--muted)">→</span>
+        </div>
+      </div>`;
+
+    // Inject into savings list
+    const list = document.getElementById('custom-pockets-list');
+    if (list) {
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = cardHtml;
+      list.appendChild(wrapper.firstElementChild);
+    }
+
+    // Update success screen content
+    const title = document.getElementById('new-pocket-success-title');
+    const sub   = document.getElementById('new-pocket-success-sub');
+    const icon  = document.getElementById('new-pocket-success-icon');
+    if (title) title.textContent = `${name} is live`;
+    if (icon)  icon.textContent  = emoji;
+    if (sub)   sub.textContent   = amt > 0
+      ? `${fmt(amt)} parked and earning ${cfg.rate} p.a.\nReady whenever you need it.`
+      : `Your pocket is ready. Add money whenever you like.`;
+
+    go('s-new-pocket-success');
   }
 </script>
 </body>
